@@ -1,0 +1,38 @@
+{% extends 'works/base.html' %}
+{% block head %} Detali company | Company page {% endblock %}
+
+{% block content %}
+
+
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Comapny name: {{company.company_name}}</h1>
+    <hr class="my-4">
+    <p class="lead">Company manegers: </p>
+        <ul>
+        {% for manager in company.manager_set.all %}
+            <li>{{ manager.name }}</li>
+        {% endfor %}
+        </ul>
+    <hr class="my-4">
+    <p class="lead">Open works: </p>
+        <ul>
+        {% for work in company.work_set.all %}
+            <li>{{ work.description }}</li>
+        {% endfor %}
+        </ul>
+    <hr class="my-4">
+    <p class="lead">Closed works: </p>
+    <ul>
+    {% for work in company.work_set.all %}
+        <li>{{ work.description }}</li>
+        <ul>
+        {% for work_close in work.work_place_set.all %}
+            <li>{{work_close.worker}}</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
