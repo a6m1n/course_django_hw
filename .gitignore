@@ -18,6 +18,10 @@ _mailinglist
 .idea/
 docs/_build/
 
+db.sqlite3
+.sqlite3
+*.sqlite3
+
 # Coverage reports
 htmlcov/
 .coverage
