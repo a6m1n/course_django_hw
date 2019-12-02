@@ -3,7 +3,7 @@ from django.http import HttpResponse, Http404
 from django.views.generic import View
 
 from .models import Companies, Worker, Work_place, Fineshed_work, Manager
-from .forms import WorkFrorm
+from .forms import WorkFrorm, SetWorkPlace
 # Create your views here.
 
 
@@ -45,6 +45,7 @@ def info_managers(request, work_id):
 
 
 class WorkCreate(View):
+    
     def get(self, request):
         form = WorkFrorm()
         return render(request, 'works/work_create.html', {'form': form})
@@ -53,4 +54,16 @@ class WorkCreate(View):
         forms = WorkFrorm(request.POST)
         if forms.is_valid():
             new_work = forms.save()
-            return redirect(index)
+            return HttpResponse('Success create work!')
+
+class SetWorker(View):
+    
+    def get(self, request):
+        form = SetWorkPlace()
+        return render(request, 'works/set_worker.html', {'form': form})
+
+    def post(self, request):
+        forms = SetWorkPlace(request.POST)
+        if forms.is_valid():
+            new_work = forms.save()
+            return HttpResponse('Success set in work!')

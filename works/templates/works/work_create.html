@@ -2,21 +2,22 @@
 {% block head %} Work create | Work page {% endblock %}
 
 {% block content %}
-<div class="container">
-    <hr class="my-4">
-    <h1 class="display-4">Create work</h1>
-    <form action="{% url 'work_create' %}" method="POST">
-        {% csrf_token %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">Create work</h1>
+        <hr class="my-4">
+        <form action="{% url 'work_create' %}" method="POST">
+            {% csrf_token %}
 
-        {% for field in form %}
-            <div class="form-group">
-                {{ filed.label }}
-                {{ field }}
-            </div>
-        {% endfor %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label }}
+                    {{ field }}
+                </div>
+            {% endfor %}
 
-        <button type="submit" class="btn btn-primary mb-2">Submit</button>
-    </form>
+            <button type="submit" class="btn btn-primary mb-2">Submit</button>
+        </form>
+    </div>
 </div>
-
 {% endblock %}

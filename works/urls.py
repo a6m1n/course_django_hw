@@ -16,4 +16,6 @@ urlpatterns = [
     path('<int:work_id>/managers', views.info_managers, name='info_managers'),
     # ex: /works/work/create - Create work
     path('work/create', views.WorkCreate.as_view(), name='work_create'),
+    # ex: /works/work/set_worker - Create work
+    path('work/set_worker', views.SetWorker.as_view(), name='worker_set'),
 ]

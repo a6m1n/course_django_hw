@@ -11,21 +11,24 @@
     
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <a class="navbar-brand" href="{% url 'index' %}">Work list</a>
+          <a class="navbar-brand" href="/">Home</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{% url 'index' %}">Company list<span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'info_workers' %}">Workers <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'work_create' %}">Create work <span class="sr-only">(current)</span></a>
-              </li
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'worker_set' %}">Set work place <span class="sr-only">(current)</span></a>
+              </li>
             </ul>
           </div>
         </nav>

@@ -22,8 +22,16 @@ class Manager(models.Model):
 
 
 class Work(models.Model):
+    ACTIVE = (
+        (0, False),
+        (1, True),
+    )
+
+
     description = models.CharField(max_length=200)
     company = models.ForeignKey(Companies, on_delete=models.CASCADE)
+    is_active = models.PositiveSmallIntegerField(
+        default=0, max_length=1, choices=ACTIVE)
 
     def __str__(self):
         return f'Work name "{self.description}". ({self.id})'
@@ -56,7 +64,7 @@ class WorkTime(models.Model):
         self.save()
 
     def __str__(self):
-        return f'{self.date_start} ({self.id})'
+        return f'Work time {self.date_start} ({self.id})'
 
 
 class Work_place(models.Model):
@@ -75,26 +83,29 @@ class Work_place(models.Model):
 
     work_name = models.ForeignKey(
         Work, on_delete=models.PROTECT)
+    
     worker = models.OneToOneField(
         Worker, models.SET_NULL, blank=True, null=True)
+    
     status = models.PositiveSmallIntegerField(
         max_length=1, choices=STATUS_CHOITHES, default=1)
+
     work_time = models.ForeignKey(WorkTime,
-                                  on_delete=models.SET_NULL, blank=True, null=True)
+        on_delete=models.SET_NULL, blank=True, null=True)
+    
     is_copy = models.PositiveSmallIntegerField(
         default=0, max_length=1, choices=COPY)
 
     def save(self, *args, **kwargs):
-        if self.status == 0:
-            if self.is_copy == 0:
-                f = Fineshed_work(
-                    worker=self.worker,
-                    work_name=self.work_name,
-                    work_time=self.work_time
-                )
-                self.is_copy = 1
-                self.save()
-                f.save()
+        if self.status == 0 and self.is_copy == 0:
+            f = Fineshed_work(
+                worker=self.worker,
+                work_name=self.work_name,
+                work_time=self.work_time
+            )
+            self.is_copy = 1
+            self.save()
+            f.save()
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -107,7 +118,7 @@ class Fineshed_work(models.Model):
     work_time = models.ForeignKey(WorkTime, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f'Worker {self.worker}. ({self.id})'
+        return f'Finished {self.worker.last_name}. {self.work_name.description} ({self.id})'
 
 
 @receiver(post_save, sender=Work_place)

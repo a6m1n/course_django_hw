@@ -1,0 +1,28 @@
+{% extends 'works/base.html' %}
+{% block head %} Set worker in work | Work page {% endblock %}
+
+{% block content %}
+
+
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Set worker in work:</h1>
+    <hr class="my-4">
+    <p class="lead">Input data:</p>
+    <form action="{% url 'worker_set' %}" method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label }}
+                {{ field }}
+
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+
+    </form>
+    <hr class="my-4">
+  </div>
+</div>
+{% endblock %}
