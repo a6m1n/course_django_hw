@@ -1,0 +1,22 @@
+{% extends 'works/base.html' %}
+{% block head %} Work create | Work page {% endblock %}
+
+{% block content %}
+<div class="container">
+    <hr class="my-4">
+    <h1 class="display-4">Create work</h1>
+    <form action="{% url 'work_create' %}" method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="form-group">
+                {{ filed.label }}
+                {{ field }}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+    </form>
+</div>
+
+{% endblock %}

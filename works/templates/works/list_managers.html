@@ -1,0 +1,17 @@
+{% extends 'works/base.html' %}
+{% block head %} All manegers | Manegers page {% endblock %}
+
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">All managers:</h1>
+    <hr class="my-4">
+    <ul>
+        {% for manager in managers %}
+            <h6>{{ manager.name }}</h6>
+            <hr class="my-4">
+        {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

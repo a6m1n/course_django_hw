@@ -8,7 +8,7 @@
   <div class="container">
     <h1 class="display-4">Comapny name: {{company.company_name}}</h1>
     <hr class="my-4">
-    <p class="lead">Company manegers: </p>
+    <p class="lead"><a href="{% url 'info_managers' work_id=company.id %}">Company manegers:  </a></p>
         <ul>
         {% for manager in company.manager_set.all %}
             <li>{{ manager.name }}</li>

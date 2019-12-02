@@ -1,0 +1,25 @@
+{% extends 'works/base.html' %}
+{% block head %} Detali worker | Worker page {% endblock %}
+
+{% block content %}
+
+
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Worker name: {{worker.first_name}} {{worker.last_name}}</h1>
+    <hr class="my-4">
+    <p class="lead">Works: </p>
+    <ul>
+        {% for work in list_work %}
+            <p>Name work: {{work.work_name.description}}</p>
+            <p>Date start: {{work.work_time.date_start|date:"t.m.Y G:i"}}</p>
+            <!-- SET CLOSE WORK -->
+            <!-- <p>{{work.work_time.set_date_end}}</p> -->
+            <p>Date end: {{work.work_time.date_end|date:"t.m.Y G:i"}}</p>
+            <hr class="my-4">
+
+        {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
