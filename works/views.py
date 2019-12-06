@@ -2,14 +2,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.views.generic import View
 
-from .models import Companies, Worker, Work_place, Fineshed_work, Manager
+from .models import Companies, Worker, WorkPlace, WorkTime, Manager
 from .forms import WorkFrorm, SetWorkPlace
 # Create your views here.
 
 
 def index(request):
-    works = Companies.objects.order_by('id')[:10]
-    return render(request, 'works/works_page.html', {'work_list': works})
+    companies = Companies.objects.order_by('id')[:10]
+    return render(request, 'works/works_page.html', {'companies_list': companies})
 
 
 def info_work(request, work_id):
@@ -33,7 +33,7 @@ def info_worker(request, worker_id):
     except Worker.DoesNotExist:
         raise Http404('Worker does not exist')
 
-    list_work = Fineshed_work.objects.filter(worker_id=worker_id)
+    list_work = WorkPlace.objects.filter(worker_id=worker_id, status="F")
 
     return render(request, 'works/info_worker.html', {'worker': worker, 'list_work': list_work})
 

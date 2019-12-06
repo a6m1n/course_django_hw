@@ -8,12 +8,12 @@
   <div class="container">
     <h1 class="display-4">Worker name: {{worker.first_name}} {{worker.last_name}}</h1>
     <hr class="my-4">
-    {%if worker.work_place %}
+    {%if worker.workplace  %}
     <p class="lead">Active work: </p>
     <ul>
-        <p>Name work: {{worker.work_place.work_name.description}}</p>
-        <p>Status: {{worker.work_place.get_status_display}}</p>
-        <p>Date start: {{worker.work_place.work_time.date_start}}</p>
+        <p>Name work: {{worker.workplace.work.description}}</p>
+        <p>Status: {{worker.workplace.get_status_display}}</p>
+        <p>Date start: {{worker.workplace.work_time.date_start}}</p>
     </ul>
     {%else%}
     <p class="lead">Not have work.</p>
@@ -23,7 +23,7 @@
     <p class="lead">Past works: </p>
     <ul>
         {% for work in list_work %}
-            <p>Name work: {{work.work_name.description}}</p>
+            <p>Name work: {{work.work.description}}</p>
             <p>Date start: {{work.work_time.date_start|date:"t.m.Y G:i"}}</p>
             {% comment %}
             <!-- SET CLOSE WORK -->

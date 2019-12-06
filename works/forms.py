@@ -1,5 +1,5 @@
 from django import forms
-from .models import Work, Companies, Work_place, Worker
+from .models import Work, Companies, WorkPlace, Worker
 
 
 class WorkFrorm(forms.Form):
@@ -28,7 +28,7 @@ class SetWorkPlace(forms.Form):
     worker.widget.attrs.update({'class': 'form-control'})
 
     def save(self):
-        work_place = Work_place.objects.create(
+        work_place = WorkPlace.objects.create(
             work_name=self.cleaned_data['work_name'],
             worker=self.cleaned_data['worker'],
         )

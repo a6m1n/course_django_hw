@@ -22,16 +22,10 @@ class Manager(models.Model):
 
 
 class Work(models.Model):
-    ACTIVE = (
-        (0, False),
-        (1, True),
-    )
-
 
     description = models.CharField(max_length=200)
     company = models.ForeignKey(Companies, on_delete=models.CASCADE)
-    is_active = models.PositiveSmallIntegerField(
-        default=0, max_length=1, choices=ACTIVE)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f'Work name "{self.description}". ({self.id})'
@@ -47,6 +41,10 @@ class Worker(models.Model):
 
 class WorkTime(models.Model):
 
+    NEW = "N"
+    APPROVED = "A"
+    CANCELLED = "C"
+
     STATUS_CHOITHES = (
         (1, "New"),
         (2, "Approved"),
@@ -55,8 +53,10 @@ class WorkTime(models.Model):
 
     date_start = models.DateTimeField(auto_now_add=True)
     date_end = models.DateTimeField(blank=True, null=True)
-    status = models.PositiveSmallIntegerField(
-        max_length=1, choices=STATUS_CHOITHES, default=1)
+    status = models.CharField(
+        max_length=1, choices=STATUS_CHOITHES, default="NEW")
+    
+
 
     def set_date_end(self):
         import datetime
@@ -67,61 +67,41 @@ class WorkTime(models.Model):
         return f'Work time {self.date_start} ({self.id})'
 
 
-class Work_place(models.Model):
+class WorkPlace(models.Model):
+    FINISHED = "F"
+    NEW = "N"
+    APPROVED = "A"
+    CANCELLED = "C"
 
     STATUS_CHOITHES = (
-        (0, "Finished"),
-        (1, "New"),
-        (2, "Approved"),
-        (3, "Cancelled"),
+        ("F", "Finished"),
+        ("N", "New"),
+        ("A", "Approved"),
+        ("C", "Cancelled"),
     )
 
-    COPY = (
-        (0, False),
-        (1, True),
-    )
 
-    work_name = models.ForeignKey(
+    work = models.ForeignKey(
         Work, on_delete=models.PROTECT)
     
     worker = models.OneToOneField(
         Worker, models.SET_NULL, blank=True, null=True)
     
-    status = models.PositiveSmallIntegerField(
-        max_length=1, choices=STATUS_CHOITHES, default=1)
+    status = models.CharField(
+        max_length=1, choices=STATUS_CHOITHES, default=NEW)
 
     work_time = models.ForeignKey(WorkTime,
         on_delete=models.SET_NULL, blank=True, null=True)
     
-    is_copy = models.PositiveSmallIntegerField(
-        default=0, max_length=1, choices=COPY)
-
-    def save(self, *args, **kwargs):
-        if self.status == 0 and self.is_copy == 0:
-            f = Fineshed_work(
-                worker=self.worker,
-                work_name=self.work_name,
-                work_time=self.work_time
-            )
-            self.is_copy = 1
-            self.save()
-            f.save()
-        super().save(*args, **kwargs)
+    is_copy = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'Work place {self.work_name} - {self.worker}. ({self.id})'
+        return f'Work place {self.work} - {self.worker}. ({self.id})'
 
 
-class Fineshed_work(models.Model):
-    worker = models.ForeignKey(Worker, on_delete=models.PROTECT)
-    work_name = models.ForeignKey(Work, on_delete=models.DO_NOTHING)
-    work_time = models.ForeignKey(WorkTime, on_delete=models.DO_NOTHING)
-
-    def __str__(self):
-        return f'Finished {self.worker.last_name}. {self.work_name.description} ({self.id})'
 
 
-@receiver(post_save, sender=Work_place)
+@receiver(post_save, sender=WorkPlace)
 def my_callback(sender, created, instance, **kwargs):
 
     if created:

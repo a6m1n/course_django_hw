@@ -29,8 +29,8 @@
     {% for work in company.work_set.all %}
         <li>{{ work.description }}</li>
         <ul>
-        {% for work_close in work.work_place_set.all %}
-            <li><a href="/works/workers/{{work_close.worker.id}}/">{{work_close.worker.first_name}} {{work_close.worker.last_name}}</a></li>
+        {% for work_close in work.workplace_set.all %}
+            <li><a href="/works/workers/{{work_close.worker.id}}/">{{work_close.worker.first_name}}  {{work_close.worker.last_name}}</a></li>
         {% endfor %}
         </ul>
     {% endfor %}
