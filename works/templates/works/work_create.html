@@ -6,7 +6,7 @@
     <div class="container">
         <h1 class="display-4">Create work</h1>
         <hr class="my-4">
-        <form action="{% url 'work_create' %}" method="POST">
+        <form action="{% url 'work_create' work_id=1 %}" method="POST">
             {% csrf_token %}
 
             {% for field in form %}

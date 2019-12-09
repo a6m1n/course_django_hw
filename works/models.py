@@ -39,33 +39,6 @@ class Worker(models.Model):
         return f'Worker. Name: {self.last_name} . ({self.id})'
 
 
-class WorkTime(models.Model):
-
-    NEW = "N"
-    APPROVED = "A"
-    CANCELLED = "C"
-
-    STATUS_CHOITHES = (
-        (1, "New"),
-        (2, "Approved"),
-        (3, "Cancelled"),
-    )
-
-    date_start = models.DateTimeField(auto_now_add=True)
-    date_end = models.DateTimeField(blank=True, null=True)
-    status = models.CharField(
-        max_length=1, choices=STATUS_CHOITHES, default="NEW")
-    
-
-
-    def set_date_end(self):
-        import datetime
-        self.date_end = datetime.datetime.today()
-        self.save()
-
-    def __str__(self):
-        return f'Work time {self.date_start} ({self.id})'
-
 
 class WorkPlace(models.Model):
     FINISHED = "F"
@@ -80,33 +53,48 @@ class WorkPlace(models.Model):
         ("C", "Cancelled"),
     )
 
-
     work = models.ForeignKey(
         Work, on_delete=models.PROTECT)
-    
+
     worker = models.OneToOneField(
         Worker, models.SET_NULL, blank=True, null=True)
-    
+
     status = models.CharField(
         max_length=1, choices=STATUS_CHOITHES, default=NEW)
 
-    work_time = models.ForeignKey(WorkTime,
-        on_delete=models.SET_NULL, blank=True, null=True)
-    
+
+
     is_copy = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Work place {self.work} - {self.worker}. ({self.id})'
 
 
+class WorkTime(models.Model):
+
+    NEW = "N"
+    APPROVED = "A"
+    CANCELLED = "C"
+
+    STATUS_CHOITHES = (
+        ("N", "New"),
+        ("A", "Approved"),
+        ("C", "Cancelled"),
+    )
 
 
-@receiver(post_save, sender=WorkPlace)
-def my_callback(sender, created, instance, **kwargs):
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField(blank=True, null=True)
+    status = models.CharField(
+        max_length=1, choices=STATUS_CHOITHES, default="NEW")
+    work_place = models.ForeignKey(WorkPlace,
+        on_delete=models.CASCADE)
 
-    if created:
-        obj = WorkTime()
-        obj.save()
+    def set_date_end(self):
+        from django.utils import timezone
+        self.date_end = timezone.now()
+        self.save()
 
-        instance.work_time = obj
-        instance.save()
+    def __str__(self):
+        return f'Work time {self.date_start} ({self.id})'
+

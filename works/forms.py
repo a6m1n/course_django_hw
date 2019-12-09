@@ -1,6 +1,6 @@
 from django import forms
-from .models import Work, Companies, WorkPlace, Worker
 
+from .models import Work, Companies, WorkPlace, Worker, WorkTime
 
 class WorkFrorm(forms.Form):
     description = forms.CharField(max_length=200, label='Description work: ')
@@ -33,4 +33,20 @@ class SetWorkPlace(forms.Form):
             worker=self.cleaned_data['worker'],
         )
 
+class WorkTimeForm(forms.Form):
+    date_start = forms.DateField()
+    date_end = forms.DateField()
+    status = forms.ModelChoiceField(queryset=WorkPlace.objects.all())
+
+    def save(self):
+        new_work = WorkTime.objects.create(
+            date_start=self.cleaned_data['date_start'],
+            status=self.cleaned_data['date_end'],
+            date_end=self.cleaned_data['status'],
+        )
+
+    # def __init__(self, user_id, *args, **kwargs):
+    #     super(WorkTimeForm, self).__init__(*args, **kwargs)
+    #     self.fields['foo_select'].queryset = WorkPlace.objects.get('worker.id' == user_id)
+        
         

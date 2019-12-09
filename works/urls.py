@@ -3,6 +3,10 @@
 from django.urls import path
 from . import views
 
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
+
 urlpatterns = [
     # ex: /works/ - all companies
     path('', views.index, name='index'),
@@ -18,4 +22,8 @@ urlpatterns = [
     path('work/create', views.WorkCreate.as_view(), name='work_create'),
     # ex: /works/work/set_worker - Create work
     path('work/set_worker', views.SetWorker.as_view(), name='worker_set'),
+    # ex: /works/workers/1 - details info for one worker
+    path('workers/<int:worker_id>/worktime', views.SetWorkTime.as_view(), name='worktime_new'),
+    # ex: /works/sentry-debug/ - test accept logger
+    path('sentry-debug/', trigger_error), #test logger
 ]

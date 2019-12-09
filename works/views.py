@@ -1,10 +1,18 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseNotFound
 from django.views.generic import View
+from sentry_sdk import capture_message
+
 
 from .models import Companies, Worker, WorkPlace, WorkTime, Manager
-from .forms import WorkFrorm, SetWorkPlace
+from .forms import WorkFrorm, SetWorkPlace, WorkTimeForm
 # Create your views here.
+
+
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 def index(request):
@@ -16,7 +24,8 @@ def info_work(request, work_id):
     try:
         company = Companies.objects.get(id=work_id)
     except Companies.DoesNotExist:
-        raise Http404('Company does not exist')
+        logger.error('Company does not exist!')
+        return HttpResponseNotFound('Company does not exist')
 
     return render(request, 'works/info_work.html', {'company': company})
 
@@ -31,7 +40,7 @@ def info_worker(request, worker_id):
     try:
         worker = Worker.objects.get(id=worker_id)
     except Worker.DoesNotExist:
-        raise Http404('Worker does not exist')
+        return HttpResponseNotFound('Worker does not exist')
 
     list_work = WorkPlace.objects.filter(worker_id=worker_id, status="F")
 
@@ -67,3 +76,15 @@ class SetWorker(View):
         if forms.is_valid():
             new_work = forms.save()
             return HttpResponse('Success set in work!')
+
+class SetWorkTime(View):
+    """docstring for ClassName"""
+    def get(self, request, worker_id):
+        form = WorkTimeForm()
+        return render(request, 'works/crete_worktime.html', {'form': form})
+
+    # def post(self, request, worker_id):
+    #     forms = WorkTimeForm(request.POST)
+    #     if forms.is_valid():
+    #         new_work = forms.save()
+    #         return HttpResponse('Success set in work!')

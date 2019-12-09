@@ -1,0 +1,20 @@
+{% extends 'works/base.html' %}
+{% block head %} Create worktime | WorkTime page {% endblock %}
+
+{% block content %}
+    <h1>WorktimePage</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label }}
+                {{ field }}
+
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+
+    </form>
+    <hr class
+{% endblock %}
