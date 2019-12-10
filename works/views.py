@@ -6,7 +6,6 @@ from sentry_sdk import capture_message
 
 from .models import Companies, Worker, WorkPlace, WorkTime, Manager
 from .forms import WorkFrorm, SetWorkPlace, WorkTimeForm
-# Create your views here.
 
 
 import logging
@@ -54,7 +53,7 @@ def info_managers(request, work_id):
 
 
 class WorkCreate(View):
-    
+
     def get(self, request):
         form = WorkFrorm()
         return render(request, 'works/work_create.html', {'form': form})
@@ -65,8 +64,9 @@ class WorkCreate(View):
             new_work = forms.save()
             return HttpResponse('Success create work!')
 
+
 class SetWorker(View):
-    
+
     def get(self, request):
         form = SetWorkPlace()
         return render(request, 'works/set_worker.html', {'form': form})
@@ -77,14 +77,18 @@ class SetWorker(View):
             new_work = forms.save()
             return HttpResponse('Success set in work!')
 
+
 class SetWorkTime(View):
     """docstring for ClassName"""
-    def get(self, request, worker_id):
-        form = WorkTimeForm()
-        return render(request, 'works/crete_worktime.html', {'form': form})
 
-    # def post(self, request, worker_id):
-    #     forms = WorkTimeForm(request.POST)
-    #     if forms.is_valid():
-    #         new_work = forms.save()
-    #         return HttpResponse('Success set in work!')
+    def get(self, request, worker_id):
+        form = WorkTimeForm(worker_id)
+        list_work_place = WorkPlace.objects.filter(worker_id=worker_id)
+        return render(request, 'works/crete_worktime.html', {'form': form, 'list_wp': list_work_place})
+
+    def post(self, request, worker_id):
+        forms = WorkTimeForm(worker_id, request.POST)
+        if forms.is_valid():
+            new_work = forms.save()
+            return HttpResponse('Success set in work!')
+        return HttpResponse('Form not valid!')

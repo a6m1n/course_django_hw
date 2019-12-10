@@ -7,6 +7,7 @@
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
     <h1 class="display-4">Worker name: {{worker.first_name}} {{worker.last_name}}</h1>
+    <a href="{% url 'worktime_new' worker_id=worker.id %} "class="btn btn-outline-dark">Create work time</a>
     <hr class="my-4">
     {%if worker.workplace  %}
     <p class="lead">Active work: </p>
@@ -26,8 +27,6 @@
             <p>Name work: {{work.work.description}}</p>
             <p>Date start: {{work.work_time.date_start|date:"t.m.Y G:i"}}</p>
             {% comment %}
-            <!-- SET CLOSE WORK -->
-            <!-- <p>{{work.work_time.set_date_end}}</p> -->
             {% endcomment %}
             <p>Date end: {{work.work_time.date_end|date:"t.m.Y G:i"}}</p>
             <hr class="my-4">

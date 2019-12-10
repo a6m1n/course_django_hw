@@ -2,19 +2,56 @@
 {% block head %} Create worktime | WorkTime page {% endblock %}
 
 {% block content %}
+{%if list_wp%}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
     <h1>WorktimePage</h1>
-    <form action="" method="POST">
-        {% csrf_token %}
-
-        {% for field in form %}
+        <form action="" method="POST">
+            {% csrf_token %}
+              <div class="form-group">
+                  {{form.date_start.label}}
+                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                  {{form.date_start}}
+                  <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                {{form.date_end.label}}
+                <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                  {{form.date_end}}
+                  <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
+              </div>
             <div class="form-group">
-                {{ field.label }}
-                {{ field }}
-
+                {{form.status.label}}
+                {{form.status}}
             </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            <button type="submit" class="btn btn-primary mb-2">Submit</button>
+        </form>
+    </div>
+    <script>
+      $(function () {
+        $("#datetimepicker1").datetimepicker( {format:'DD/MM/YYYY HH:mm:ss'},);
+      });
+      $(function () {
+        $("#datetimepicker2").datetimepicker({format:'DD/MM/YYYY HH:mm:ss'});
+      });
+    </script>
+</div>
 
-    </form>
-    <hr class
+
+
+
+{%else%}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">You need find work, if you want see this page</h1>
+    <hr class="my-4">
+  </div>
+</div>
+{%endif%}
 {% endblock %}

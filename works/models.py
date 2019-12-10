@@ -39,7 +39,6 @@ class Worker(models.Model):
         return f'Worker. Name: {self.last_name} . ({self.id})'
 
 
-
 class WorkPlace(models.Model):
     FINISHED = "F"
     NEW = "N"
@@ -62,8 +61,6 @@ class WorkPlace(models.Model):
     status = models.CharField(
         max_length=1, choices=STATUS_CHOITHES, default=NEW)
 
-
-
     is_copy = models.BooleanField(default=False)
 
     def __str__(self):
@@ -82,13 +79,12 @@ class WorkTime(models.Model):
         ("C", "Cancelled"),
     )
 
-
     date_start = models.DateTimeField()
     date_end = models.DateTimeField(blank=True, null=True)
     status = models.CharField(
         max_length=1, choices=STATUS_CHOITHES, default="NEW")
     work_place = models.ForeignKey(WorkPlace,
-        on_delete=models.CASCADE)
+                                   on_delete=models.CASCADE)
 
     def set_date_end(self):
         from django.utils import timezone
@@ -97,4 +93,3 @@ class WorkTime(models.Model):
 
     def __str__(self):
         return f'Work time {self.date_start} ({self.id})'
-

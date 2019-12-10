@@ -25,7 +25,7 @@ SECRET_KEY = '9gz*(9nhk+hz^mg%cz0!tna!3en*&2yjc65equ^3yz4jcv0*m+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -119,3 +119,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# set logger 
+
+
+
+# logger API
+
+import logging
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://50e7c97f3533495296e6ebd4f8d1a772@sentry.io/1849995",
+    integrations=[DjangoIntegration()]
+)

@@ -2,16 +2,16 @@
 {% block head %} All workers | List workers {% endblock %}
 
 {% block content %}
-
-<div class="container ">
-    <ul>
-        {% for worker in workers %}
-            <li>
-                <a href="{{worker.id}}">{{worker.first_name}} {{worker.last_name}}</a>
-            </li>
-        {% endfor %}
-    </ul>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container ">
+        <ul>
+            {% for worker in workers %}
+                <li>
+                    <a href="{{worker.id}}">{{worker.first_name}} {{worker.last_name}}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
-
 
 {% endblock %}
