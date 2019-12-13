@@ -46,10 +46,12 @@ class WorkTimeForm(forms.Form):
                                     'class': 'form-control datetimepicker-input',
                                     'placeholder': 'Input date start work',
                                     })
+
     date_end.widget.attrs.update({'data-target': '#datetimepicker2',
                                   'class': 'form-control datetimepicker-input',
                                   'placeholder': 'Input date end work',
                                   })
+    
     status.widget.attrs.update({
         "class": "form-control"
     })

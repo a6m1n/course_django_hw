@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+from celery import Celery
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -134,3 +137,24 @@ sentry_sdk.init(
     dsn="https://50e7c97f3533495296e6ebd4f8d1a772@sentry.io/1849995",
     integrations=[DjangoIntegration()]
 )
+
+# CELERY
+
+from celery.schedules import crontab
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Kiev'
+# CELERY_BEAT_SCHEDULE = {
+#     'task-number-one': {
+#        'task': 'works.tasks.read_api',
+#        'schedule': 10.0
+#        # 'args': (4,) 
+#     },
+# }
+# CELERY_ROUTES = {
+#    "works.tasks.read_api": {"queue": "read_api"},
+# }

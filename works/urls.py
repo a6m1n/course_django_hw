@@ -24,8 +24,10 @@ urlpatterns = [
     # ex: /works/work/set_worker - Create work
     path('work/set_worker', views.SetWorker.as_view(), name='worker_set'),
     # ex: /works/workers/1/worktime - details info for one worker
-    path('workers/<int:worker_id>/worktime',
-         views.SetWorkTime.as_view(), name='worktime_new'),
+    path('workers/<int:worker_id>/worktime', 
+        views.SetWorkTime.as_view(), name='worktime_new'),
+    # ex: /works/update_workers/ - test accept logger
+    path('update_workers/', views.update_workers, name='update_workers'),  # test logger
     # ex: /works/sentry-debug/ - test accept logger
     path('sentry-debug/', trigger_error),  # test logger
 ]

@@ -7,6 +7,9 @@ from sentry_sdk import capture_message
 from .models import Companies, Worker, WorkPlace, WorkTime, Manager
 from .forms import WorkFrorm, SetWorkPlace, WorkTimeForm
 
+from workers_management.celery import app
+
+from works.tasks import add
 
 import logging
 
@@ -92,3 +95,10 @@ class SetWorkTime(View):
             new_work = forms.save()
             return HttpResponse('Success set in work!')
         return HttpResponse('Form not valid!')
+
+def update_workers(request):
+    # res=add.delay(2,3)
+    # print(res.get())
+    result = app.send_task('works.tasks.add', args=(4,4,))
+    print(result.ready())
+    return HttpResponseNotFound('Workers update')
