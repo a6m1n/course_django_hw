@@ -36,7 +36,7 @@ class Worker(models.Model):
     last_name = models.CharField(max_length=50)
 
     def __str__(self):
-        return f'Worker. Name: {self.last_name} . ({self.id})'
+        return f'Name: {self.last_name} . ({self.id})'
 
 
 class WorkPlace(models.Model):
@@ -56,12 +56,13 @@ class WorkPlace(models.Model):
         Work, on_delete=models.PROTECT)
 
     worker = models.OneToOneField(
-        Worker, models.SET_NULL, blank=True, null=True)
+        Worker, models.PROTECT, blank=True, null=True)
 
     status = models.CharField(
         max_length=1, choices=STATUS_CHOITHES, default=NEW)
 
     is_copy = models.BooleanField(default=False)
+    limit_hours = models.PositiveIntegerField()
 
     def __str__(self):
         return f'Work place {self.work} - {self.worker}. ({self.id})'
@@ -86,6 +87,8 @@ class WorkTime(models.Model):
     work_place = models.ForeignKey(WorkPlace,
                                    on_delete=models.CASCADE)
 
+
+
     def set_date_end(self):
         from django.utils import timezone
         self.date_end = timezone.now()
@@ -93,3 +96,12 @@ class WorkTime(models.Model):
 
     def __str__(self):
         return f'Work time {self.date_start} ({self.id})'
+
+class Statistics(models.Model):
+
+    worker = models.ForeignKey(Worker, on_delete=models.PROTECT)
+    number_weak = models.PositiveIntegerField()
+    work_time_in_weak = models.DateTimeField()
+
+    def __str__(self):
+        return f'Statistics for {self.worker} ({self.id})'

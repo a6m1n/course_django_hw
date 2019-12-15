@@ -99,6 +99,6 @@ class SetWorkTime(View):
 def update_workers(request):
     # res=add.delay(2,3)
     # print(res.get())
-    result = app.send_task('works.tasks.add', args=(4,4,))
+    result = app.send_task('works.tasks.square_root', args=(4,))
     print(result.ready())
     return HttpResponseNotFound('Workers update')
