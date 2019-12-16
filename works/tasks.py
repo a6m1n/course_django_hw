@@ -46,9 +46,6 @@ def read_api():
 @app.task(name="works.tasks.one_user_limit_time_in_project")
 def one_user_limit_time_in_project():
 
-    def list_emails(list_obj):
-        return [email[0] for email in list_obj]
-
     users = Worker.objects.all()
 
     curdate = datetime.datetime.now()-datetime.timedelta(days=7)
