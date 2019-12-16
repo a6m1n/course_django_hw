@@ -9,7 +9,7 @@ from .forms import WorkFrorm, SetWorkPlace, WorkTimeForm
 
 from workers_management.celery import app
 
-from works.tasks import add
+
 
 import logging
 
@@ -97,8 +97,9 @@ class SetWorkTime(View):
         return HttpResponse('Form not valid!')
 
 def update_workers(request):
-    # res=add.delay(2,3)
-    # print(res.get())
-    result = app.send_task('works.tasks.square_root', args=(4,))
+ 
+    result = app.send_task('works.tasks.read_api')
     print(result.ready())
+    print(result.get(timeout=15))
+
     return HttpResponseNotFound('Workers update')

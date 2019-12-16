@@ -1,3 +1,7 @@
+from celery.schedules import crontab
+from sentry_sdk.integrations.django import DjangoIntegration
+import sentry_sdk
+import logging
 """
 Django settings for workers_management project.
 
@@ -123,15 +127,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# set logger 
-
+# set logger
 
 
 # logger API
 
-import logging
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
 sentry_sdk.init(
     dsn="https://50e7c97f3533495296e6ebd4f8d1a772@sentry.io/1849995",
@@ -140,7 +140,6 @@ sentry_sdk.init(
 
 # CELERY
 
-from celery.schedules import crontab
 
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
@@ -148,13 +147,14 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Kiev'
-# CELERY_BEAT_SCHEDULE = {
-#     'task-number-one': {
-#        'task': 'works.tasks.read_api',
-#        'schedule': 10.0
-#        # 'args': (4,) 
-#     },
-# }
-# CELERY_ROUTES = {
-#    "works.tasks.read_api": {"queue": "read_api"},
-# }
+CELERY_BEAT_SCHEDULE = {
+    'task-number-one': {
+        'task': 'works.tasks.one_user_limit_time_in_project',
+        'schedule': crontab(minute=0, hour=0, day_of_week='sunday')
+    },
+}
+CELERY_ROUTES = {
+    "works.tasks.read_api": {"queue": "read_api"},
+    "works.tasks.send_mail": {"queue": "send_mail"},
+    "works.tasks.one_user_limit_time_in_project": {"queue": "one_user_limit_time_in_project"},
+}

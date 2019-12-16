@@ -1,5 +1,6 @@
 from django.db import models
 from django.dispatch import receiver
+from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
 # Create your models here.
@@ -16,6 +17,8 @@ class Companies(models.Model):
 class Manager(models.Model):
     company = models.ForeignKey(Companies, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    
 
     def __str__(self):
         return f'Manager "{self.name}". ({self.id})'
@@ -34,6 +37,7 @@ class Work(models.Model):
 class Worker(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Name: {self.last_name} . ({self.id})'
@@ -101,7 +105,11 @@ class Statistics(models.Model):
 
     worker = models.ForeignKey(Worker, on_delete=models.PROTECT)
     number_weak = models.PositiveIntegerField()
-    work_time_in_weak = models.DateTimeField()
+    work_time_in_weak = models.PositiveIntegerField()
+
+    def timedelta_to_sec(time):
+        return time.total_seconds()
 
     def __str__(self):
         return f'Statistics for {self.worker} ({self.id})'
+
