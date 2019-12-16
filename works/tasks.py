@@ -17,25 +17,31 @@ def read_api():
 
     def create_workers_from_json(json):
         password = '12345678qwe'
+        all_users = User.objects.all() 
 
         for user in json:
-            if not User.objects.filter(email=user['email']):
-                user_users = User.objects.create_user(
-                    user['username'],
-                    user['email'],
-                    password)
-
+            if not all_users.filter(email=user['email']):
                 user_name = user['name'].split()
-                Worker.objects.create(
+                user_users = User.objects.create_user(
+                    username=user['username'],
+                    email=user['email'],
+                    password=password,
                     first_name=user_name[0],
                     last_name=user_name[1],
+
+                )
+
+                Worker.objects.create(
                     user=user_users
                 )
 
     url = 'https://jsonplaceholder.typicode.com/users'
     r = requests.get(url)
-    return create_workers_from_json(r.json())
 
+    if r.status_code==200:
+        return create_workers_from_json(r.json())
+    
+    return False
 
 @app.task(name="works.tasks.one_user_limit_time_in_project")
 def one_user_limit_time_in_project():
@@ -60,12 +66,12 @@ def one_user_limit_time_in_project():
         limit = datetime.timedelta(hours=user.workplace.limit_hours)
         if limit < res:
             print(user)
-            lists=list_email(user.workplace.work.company.manager_set.all().values_list('user__email'))
+            lists = user.workplace.work.company.manager_set.all().values_list('user__email', flat=True)
             send_mail.apply_async(args=('Limit time',
                                         f'Limit error: {user}. ',
                                         lists
-                                )
-            )
+                                        )
+                                  )
 
         Statistics.objects.create(
             worker=user,
