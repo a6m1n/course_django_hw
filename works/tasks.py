@@ -16,32 +16,46 @@ import pytz
 def read_api():
 
     def create_workers_from_json(json):
+        ''' 
+        ты можешь выбрать из json данных только емейлы используя списковые включения
+        и потом выбрать только те которых нет в базе
+        и убрать этот цикл фор и сделать массовый запрос на создание.
+
+        то есть. Нужно почистить джейсон и уникальные елменты добавить в базу.
+        '''
         password = '12345678qwe'
-        all_users = User.objects.all() 
 
         for user in json:
-            if not all_users.filter(email=user['email']):
-                user_name = user['name'].split()
-                user_users = User.objects.create_user(
-                    username=user['username'],
-                    email=user['email'],
-                    password=password,
-                    first_name=user_name[0],
-                    last_name=user_name[1],
+            user_name = user['name'].split()
+            user_users = User.objects.create_user(
+                username=user['username'],
+                email=user['email'],
+                password=password,
+                first_name=user_name[0],
+                last_name=user_name[1],
 
-                )
+            )
 
-                Worker.objects.create(
-                    user=user_users
-                )
+            Worker.objects.create(
+                user=user_users
+            )
 
     url = 'https://jsonplaceholder.typicode.com/users'
     r = requests.get(url)
 
-    if r.status_code==200:
-        return create_workers_from_json(r.json())
-    
+    if r.status_code == 200:
+        emails = [user['email'] for user in r.json()]
+        
+        emails2 = Worker.objects.filter(
+            user__email__in=emails).values_list('user__email', flat=True)
+
+        emails = [email for email in emails if email not in emails2]
+        users = [user for user in r.json() if user['email'] in emails]
+
+        return create_workers_from_json(users)
+
     return False
+
 
 @app.task(name="works.tasks.one_user_limit_time_in_project")
 def one_user_limit_time_in_project():
@@ -63,7 +77,8 @@ def one_user_limit_time_in_project():
         limit = datetime.timedelta(hours=user.workplace.limit_hours)
         if limit < res:
             print(user)
-            lists = user.workplace.work.company.manager_set.all().values_list('user__email', flat=True)
+            lists = user.workplace.work.company.manager_set.all(
+            ).values_list('user__email', flat=True)
             send_mail.apply_async(args=('Limit time',
                                         f'Limit error: {user}. ',
                                         lists

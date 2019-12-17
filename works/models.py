@@ -35,12 +35,10 @@ class Work(models.Model):
 
 
 class Worker(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Name: {self.last_name} . ({self.id})'
+        return f'Name: {self.user.last_name}. ({self.id})'
 
 
 class WorkPlace(models.Model):
