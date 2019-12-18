@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'works.apps.WorksConfig'
+    'works.apps.WorksConfig',
+    'user_auth.apps.UserAuthConfig',
 ]
 
 MIDDLEWARE = [
@@ -158,3 +159,5 @@ CELERY_ROUTES = {
     "works.tasks.send_mail": {"queue": "send_mail"},
     "works.tasks.one_user_limit_time_in_project": {"queue": "one_user_limit_time_in_project"},
 }
+# AUTH
+LOGIN_REDIRECT_URL = '/works'

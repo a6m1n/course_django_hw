@@ -3,10 +3,9 @@
 
 {% block content %}
 
-
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1 class="display-4">Worker name: {{worker.first_name}} {{worker.last_name}}</h1>
+    <h1 class="display-4">Worker name: {{worker.user.first_name}} {{worker.user.last_name}}</h1>
     <a href="{% url 'worktime_new' worker_id=worker.id %} "class="btn btn-outline-dark">Create work time</a>
     <hr class="my-4">
     {%if worker.workplace  %}

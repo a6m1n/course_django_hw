@@ -1,0 +1,30 @@
+{% extends 'works/base.html' %}
+{% block head %} Login {% endblock %}
+
+{% block content %}
+<h1 class="display-4 text-center">Enter your username and passwod.</h1>
+<div class="container mt-5">
+
+    {% if form.errors %}
+      <div class="alert alert-warning" role="alert">
+        Your username and password didn't match. Please try again.
+      </div>
+    {% endif %}
+  
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <div class="row">
+      {% for field in form %}
+        <div class="col">
+        <input type="text" class="form-control" placeholder="{{ field.html_name }}" id="{{ field.id_for_label }}" name="{{ field.html_name }}">
+      </div> 
+      {% endfor %}
+      <input type="submit" value="login"  class="btn btn-outline-secondary"/>
+      <input type="hidden" name="next" value="{{ next }}"/>
+    </div>
+    <p class="pt-2"><a href="{% url 'password_reset' %}" ><button type="button" class="btn btn-outline-primary">Lost passwod?</button></a></p>
+  </form>
+
+
+</div>
+{% endblock %}

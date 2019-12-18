@@ -2,8 +2,11 @@
 {% block head %} List company | Main page {% endblock %}
 
 {% block content %}
+
+  
 <div class="jumbotron jumbotron-fluid">
   <div class="container ">
+      {% if user.is_authenticated %}
       {% for company in companies_list %}
       <div class="card" style="margin-top: 20px;">
         <h5 class="card-header">Find woker </h5>
@@ -14,6 +17,11 @@
         </div>
       </div>
       {% endfor %}
+      {% else %}
+      <h1 class="display-3 text-center">Please login to see this page.</h1>
+
+      <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-dark btn-block">Login</button></a>
+      {% endif %}
   </div>
 </div>
 

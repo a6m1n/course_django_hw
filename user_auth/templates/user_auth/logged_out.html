@@ -1,0 +1,15 @@
+{% extends 'works/base.html' %}
+{% block head %} Logout{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card text-center">
+      <div class="card-header">Logged out!</div>
+      <div class="card-body">
+        <p class="card-text">Come back soon, we are always glad to see you!</p>
+        <a href="{% url 'login'%} "class="btn btn-primary">Click here to login again.</a>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

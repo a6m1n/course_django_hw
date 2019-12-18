@@ -7,7 +7,7 @@
         <ul>
             {% for worker in workers %}
                 <li>
-                    <a href="{{worker.id}}">{{worker.first_name}} {{worker.last_name}}</a>
+                    <a href="{{worker.id}}">{{worker.user.first_name}} {{worker.user.last_name}}</a>
                 </li>
             {% endfor %}
         </ul>

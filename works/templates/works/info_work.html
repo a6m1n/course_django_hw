@@ -6,35 +6,46 @@
 
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1 class="display-4">Comapny name: {{company.company_name}}</h1>
-    <hr class="my-4">
-    <p class="lead"><a href="{% url 'info_managers' work_id=company.id %}">Company manegers:  </a></p>
-        <ul>
-        {% for manager in company.manager_set.all %}
-            <li>{{ manager.name }}</li>
-        {% endfor %}
-        </ul>
-    <hr class="my-4">
-    <p class="lead">Open works: </p>
+    {% if user.is_authenticated %}
+        {% if perms.works.view_companies %}
+        <h1 class="display-4">Comapny name: {{company.company_name}}</h1>
+        <hr class="my-4">
+        <p class="lead"><a href="{% url 'info_managers' work_id=company.id %}">Company manegers:  </a></p>
+            <ul>
+            {% for manager in company.manager_set.all %}
+                <li>{{ manager.name }}</li>
+            {% endfor %}
+            </ul>
+        <hr class="my-4">
+        <p class="lead">Open works: </p>
+            <ul>
+            {% for work in company.work_set.all %}
+                {% if work.is_active %}
+                    <li>{{ work.description }}</li>
+                {%endif%}
+            {% endfor %}
+            </ul>
+        <hr class="my-4">
+        <p class="lead">All works: </p>
         <ul>
         {% for work in company.work_set.all %}
-            {% if work.is_active %}
-                <li>{{ work.description }}</li>
-            {%endif%}
+            <li>{{ work.description }}</li>
+            <ul>
+            {% for work_close in work.workplace_set.all %}
+                <li><a href="/works/workers/{{work_close.worker.id}}/">{{work_close.worker.first_name}}  {{work_close.worker.last_name}}</a></li>
+            {% endfor %}
+            </ul>
         {% endfor %}
         </ul>
-    <hr class="my-4">
-    <p class="lead">All works: </p>
-    <ul>
-    {% for work in company.work_set.all %}
-        <li>{{ work.description }}</li>
-        <ul>
-        {% for work_close in work.workplace_set.all %}
-            <li><a href="/works/workers/{{work_close.worker.id}}/">{{work_close.worker.first_name}}  {{work_close.worker.last_name}}</a></li>
-        {% endfor %}
-        </ul>
-    {% endfor %}
-    </ul>
+        {% else %}
+        <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+        {% endif %}
+    {% else %}
+    <h1 class="display-3 text-center">Please login to see this page.</h1>
+
+    <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-dark btn-block">Login</button></a>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
