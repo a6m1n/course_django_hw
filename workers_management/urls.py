@@ -16,9 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+import debug_toolbar
+
 urlpatterns = [
     path('works/', include('works.urls')),
     path('admin/', admin.site.urls),
-    path('accounts/', include('user_auth.urls', namespace='user_auth')),
+    # path('accounts/', include('user_auth.urls', namespace='user_auth')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path(r'__debug', include(debug_toolbar.urls)),
 ]
+from django.conf.urls.i18n import i18n_patterns
+
+urlpatterns += i18n_patterns(
+    path('accounts/', include('user_auth.urls',namespace='user_auth')),
+)

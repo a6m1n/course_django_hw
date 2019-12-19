@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'works.apps.WorksConfig',
     'user_auth.apps.UserAuthConfig',
 ]
@@ -51,11 +52,13 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'workers_management.urls'
@@ -112,7 +115,23 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LOCALE
+
+
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGES = [
+  ('ru', _('Russian')),
+  ('en', _('English')),
+]
+
+
+LOCALE_PATHS = (
+    BASE_DIR + 'locale/', 
+)
+
+
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -122,13 +141,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# set logger
 
 
 # logger API
@@ -161,3 +177,7 @@ CELERY_ROUTES = {
 }
 # AUTH
 LOGIN_REDIRECT_URL = '/works'
+
+# django-debug-toolbar
+
+INTERNAL_IPS = ('127.0.0.1', )

@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Index view</title>
-</head>
-<body>
-    <h1>Index view</h1>
-</body>
-</html>
+{% extends 'works/base.html' %}
+{% block head %} Auth {% endblock %}
+{% block content %}
+<h1 class="display-4 text-center">{{context}}</h1>
+{% endblock %}
