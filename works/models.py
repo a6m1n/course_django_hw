@@ -11,7 +11,7 @@ class Companies(models.Model):
     pub_date = models.DateTimeField(verbose_name='date published')
 
     def __str__(self):
-        return f'Company name "{self.company_name   }". ({self.id})'
+        return f'Company name "{self.company_name}". ({self.id})'
 
 
 class Manager(models.Model):

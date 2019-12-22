@@ -1,3 +1,4 @@
+from django.conf.urls.i18n import i18n_patterns
 """workers_management URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -18,15 +19,27 @@ from django.urls import path, include
 
 import debug_toolbar
 
+from rest_framework import routers
+from rest_api import views
+
+
+router = routers.DefaultRouter()
+router.register(r'companies', views.CompaniesViewSet)
+router.register(r'managers', views.ManagersViewSet)
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
+
+
 urlpatterns = [
     path('works/', include('works.urls')),
     path('admin/', admin.site.urls),
     # path('accounts/', include('user_auth.urls', namespace='user_auth')),
+    path('api/', include(router.urls)),
+    path('api/', include('rest_api.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path(r'__debug', include(debug_toolbar.urls)),
 ]
-from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns += i18n_patterns(
-    path('accounts/', include('user_auth.urls',namespace='user_auth')),
+    path('accounts/', include('user_auth.urls', namespace='user_auth')),
 )

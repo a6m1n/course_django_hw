@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'works.apps.WorksConfig',
     'user_auth.apps.UserAuthConfig',
+    'rest_framework',
+    'rest_api.apps.RestApiConfig',
 ]
 
 MIDDLEWARE = [
@@ -181,3 +183,10 @@ LOGIN_REDIRECT_URL = '/works'
 # django-debug-toolbar
 
 INTERNAL_IPS = ('127.0.0.1', )
+
+# django rest framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
