@@ -8,9 +8,13 @@ from rest_framework import viewsets
 from django.http import Http404
 from django.contrib.auth.models import User, Group
 
-from works.models import Companies, Manager
-from .serializers import CompaniesSerializer, ManagerSerializer, UserSerializer, GroupSerializer
+from works.models import Companies, Manager, Work, Worker, WorkPlace, WorkTime, Statistics
 
+from .serializers import (
+    CompaniesSerializer, ManagerSerializer, UserSerializer, 
+    GroupSerializer, WorkSerializer, WorkerSerializer, WorkPlaceSerializer, 
+    WorkTimeSerializer, StatisticsSerializer
+)
 
 class CompaniesViewSet(viewsets.ModelViewSet):
     queryset = Companies.objects.all()
@@ -30,3 +34,27 @@ class UserViewSet(viewsets.ModelViewSet):
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+
+class WorkViewSet(viewsets.ModelViewSet):
+    queryset = Work.objects.all()
+    serializer_class = WorkSerializer
+
+class WorkerViewSet(viewsets.ModelViewSet):
+    queryset = Worker.objects.all()
+    serializer_class = WorkerSerializer
+
+
+class WorkPlaceViewSet(viewsets.ModelViewSet):
+    queryset = WorkPlace.objects.all()
+    serializer_class = WorkPlaceSerializer
+
+
+class WorkTimeViewSet(viewsets.ModelViewSet):
+    queryset = WorkTime.objects.all()
+    serializer_class = WorkTimeSerializer
+    
+
+class StatisticsViewSet(viewsets.ModelViewSet):
+    queryset = Statistics.objects.all()
+    serializer_class = StatisticsSerializer

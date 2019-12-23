@@ -3,12 +3,11 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
-# Create your models here.
 
 
 class Companies(models.Model):
     company_name = models.CharField(max_length=200)
-    pub_date = models.DateTimeField(verbose_name='date published')
+    pub_date     = models.DateTimeField(verbose_name='date published')
 
     def __str__(self):
         return f'Company name "{self.company_name}". ({self.id})'
@@ -16,8 +15,8 @@ class Companies(models.Model):
 
 class Manager(models.Model):
     company = models.ForeignKey(Companies, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name    = models.CharField(max_length=100)
+    user    = models.OneToOneField(User, on_delete=models.CASCADE)
     
 
     def __str__(self):
@@ -25,10 +24,9 @@ class Manager(models.Model):
 
 
 class Work(models.Model):
-
     description = models.CharField(max_length=200)
-    company = models.ForeignKey(Companies, on_delete=models.CASCADE)
-    is_active = models.BooleanField(default=True)
+    company     = models.ForeignKey(Companies, on_delete=models.CASCADE)
+    is_active   = models.BooleanField(default=True)
 
     def __str__(self):
         return f'Work name "{self.description}". ({self.id})'
@@ -54,16 +52,10 @@ class WorkPlace(models.Model):
         ("C", "Cancelled"),
     )
 
-    work = models.ForeignKey(
-        Work, on_delete=models.PROTECT)
-
-    worker = models.OneToOneField(
-        Worker, models.PROTECT, blank=True, null=True)
-
-    status = models.CharField(
-        max_length=1, choices=STATUS_CHOITHES, default=NEW)
-
-    is_copy = models.BooleanField(default=False)
+    work        = models.ForeignKey(Work, on_delete=models.PROTECT)
+    worker      = models.OneToOneField(Worker, models.PROTECT, blank=True, null=True)
+    status      = models.CharField(max_length=1, choices=STATUS_CHOITHES, default=NEW)
+    is_copy     = models.BooleanField(default=False)
     limit_hours = models.PositiveIntegerField()
 
     def __str__(self):
@@ -71,7 +63,6 @@ class WorkPlace(models.Model):
 
 
 class WorkTime(models.Model):
-
     NEW = "N"
     APPROVED = "A"
     CANCELLED = "C"
@@ -83,11 +74,9 @@ class WorkTime(models.Model):
     )
 
     date_start = models.DateTimeField()
-    date_end = models.DateTimeField(blank=True, null=True)
-    status = models.CharField(
-        max_length=1, choices=STATUS_CHOITHES, default="NEW")
-    work_place = models.ForeignKey(WorkPlace,
-                                   on_delete=models.CASCADE)
+    date_end   = models.DateTimeField(blank=True, null=True)
+    status     = models.CharField(max_length=1, choices=STATUS_CHOITHES, default="NEW")
+    work_place = models.ForeignKey(WorkPlace, on_delete=models.CASCADE)
 
 
 
@@ -100,9 +89,8 @@ class WorkTime(models.Model):
         return f'Work time {self.date_start} ({self.id})'
 
 class Statistics(models.Model):
-
-    worker = models.ForeignKey(Worker, on_delete=models.PROTECT)
-    number_weak = models.PositiveIntegerField()
+    worker            = models.ForeignKey(Worker, on_delete=models.PROTECT)
+    number_weak       = models.PositiveIntegerField()
     work_time_in_weak = models.PositiveIntegerField()
 
     def timedelta_to_sec(time):
