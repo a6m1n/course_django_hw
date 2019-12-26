@@ -48,7 +48,9 @@ INSTALLED_APPS = [
     'works.apps.WorksConfig',
     'user_auth.apps.UserAuthConfig',
     'rest_framework',
-    'rest_api.apps.RestApiConfig',
+    'works.rest_api',
+    'rest_framework.authtoken',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -148,7 +150,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
 # logger API
 
 
@@ -188,5 +189,13 @@ INTERNAL_IPS = ('127.0.0.1', )
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+     
+
 }

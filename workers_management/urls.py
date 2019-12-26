@@ -5,7 +5,7 @@ from django.urls import path, include
 import debug_toolbar
 
 from rest_framework import routers
-from rest_api import views
+from works.rest_api import views
 
 
 router = routers.DefaultRouter()
@@ -25,7 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('accounts/', include('user_auth.urls', namespace='user_auth')),
     path('api/', include(router.urls)),
-    path('api/', include('rest_api.urls')),
+    path('api/', include('works.rest_api.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path(r'__debug', include(debug_toolbar.urls)),
 ]
