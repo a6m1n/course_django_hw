@@ -17,23 +17,11 @@ class WorkSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Work
-        fields = ['url', 'id', 'description', 'company_name', 'company', 'is_active']
+        fields = ('url', 'id', 'description', 'company_name', 'company', 'is_active')
 
 
 class CompaniesSerializer(serializers.HyperlinkedModelSerializer):
 
-    def create(self, validated_data):
-        return Companies.objects.create(
-            company_name=validated_data['company_name'],
-            pub_date=validated_data['pub_date']
-        )
-
-    def update(self, instance, validated_data):
-
-        instance.pub_date = validated_data.get('pub_date', instance.pub_date)
-        instance.save()
-
-        return instance
 
     class Meta:
         model = Companies
@@ -44,14 +32,14 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ['url', 'id', 'username', 'email', 'groups']
+        fields = ('url', 'id', 'username', 'email', 'groups')
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Group
-        fields = ['url', 'id', 'name']
+        fields = ('url', 'id', 'name')
 
 
 
@@ -61,7 +49,7 @@ class WorkerSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Worker
-        fields = ['url', 'id', 'user_name', 'user']
+        fields = ('url', 'id', 'user_name', 'user')
 
 
 class WorkPlaceSerializer(serializers.HyperlinkedModelSerializer):
@@ -72,7 +60,10 @@ class WorkPlaceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = WorkPlace
-        fields = ['url', 'id', 'work_name', 'company_name', 'work', 'stauts_str', 'status', 'worker_name', 'worker', 'status', 'is_copy', 'limit_hours']
+        fields = ('url', 'id', 'work_name', 'company_name', 'work',
+                    'stauts_str', 'status', 'worker_name', 'worker', 'status',
+                    'is_copy', 'limit_hours'
+        )
 
 
 class WorkTimeSerializer(serializers.HyperlinkedModelSerializer):
@@ -82,7 +73,9 @@ class WorkTimeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = WorkTime
-        fields = ['url', 'id', 'date_start', 'date_end', 'status', 'stauts_str', 'work_place']
+        fields = ('url', 'id', 'date_start', 'date_end',
+                 'status', 'stauts_str', 'work_place'
+        )
 
 
 class StatisticsSerializer(serializers.HyperlinkedModelSerializer):
@@ -90,13 +83,13 @@ class StatisticsSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Statistics
-        fields = ['url', 'id', 'number_weak', 'work_time_in_weak', 'worker_name', 'worker']
+        fields = ('url', 'id', 'number_weak', 'work_time_in_weak', 'worker_name', 'worker')
 
 class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'groups']
+        fields = ('id', 'username', 'email', 'groups')
 
 class ManagerUsersSerializer(serializers.ModelSerializer):
     company_name = serializers.ReadOnlyField(source='company.company_name')
@@ -110,7 +103,7 @@ class WorkerUsersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Worker
-        fields = ['id', 'user_name', 'user']
+        fields = ('id', 'user_name', 'user')
 
 
 class WorkPlaceTextSerializer(serializers.ModelSerializer):
@@ -121,16 +114,19 @@ class WorkPlaceTextSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkPlace
-        fields = ['id', 'work_name', 'company_name', 'work', 'stauts_str', 'status', 'worker_name', 'worker', 'status', 'is_copy', 'limit_hours']
+        fields = ('id', 'work_name', 'company_name', 'work',
+                 'stauts_str', 'status', 'worker_name', 'worker',
+                  'status', 'is_copy', 'limit_hours'
+        )
 
 class WorkTextSerializer(serializers.ModelSerializer):
     company_name = serializers.ReadOnlyField(source='company.company_name')
 
     class Meta:
         model = Work
-        fields = [ 'description', 'company_name', 'company', 'is_active']
+        fields = ('description', 'company_name', 'company', 'is_active')
 
-class CompanyDetaliSerializer(serializers.Serializer):
+class CompanyDetailSerializer(serializers.ModelSerializer):
     manager_set = ManagerSerializer(many=True, read_only=True)
     work_set = WorkSerializer(many=True, read_only=True)
 

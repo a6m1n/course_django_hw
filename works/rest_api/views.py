@@ -20,10 +20,11 @@ from .serializers import (
     GroupSerializer, WorkSerializer, WorkerSerializer, WorkPlaceSerializer, 
     WorkTimeSerializer, StatisticsSerializer, AccountSerializer,
     ManagerUsersSerializer, WorkerUsersSerializer, WorkPlaceTextSerializer,
-    WorkTextSerializer, CompanyDetaliSerializer
+    WorkTextSerializer, CompanyDetailSerializer
 )
 
 from .permissions import IsOwnerOrReadOnly
+
 
 
 class CompaniesViewSet(viewsets.ModelViewSet):
@@ -33,16 +34,14 @@ class CompaniesViewSet(viewsets.ModelViewSet):
 
     @action(methods=['GET'], detail=True)
     def works(self, request, pk):
-        c = Companies.objects.get(pk=pk)
-        queryset = c.work_set.all()
+        queryset = self.get_object().work_set.all()
         serializer = WorkTextSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, pk=None):
-        queryset = Companies.objects.all()
-        сompany = get_object_or_404(queryset, pk=pk)
-        serializer = CompanyDetaliSerializer(instance=сompany, context={'request': request})
-        return Response(serializer.data)
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return CompanyDetailSerializer
+        return CompaniesSerializer
 
 
 class ManagersViewSet(viewsets.ModelViewSet):
@@ -58,7 +57,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(methods=['GET'], detail=False)
     def reviewers(self, request):
-        queryset = User.objects.filter(groups__in='1')
+        queryset = User.objects.filter(groups__name='Reviewers')
         serializer = AccountSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -79,7 +78,6 @@ class UserViewSet(viewsets.ModelViewSet):
         queryset = User.objects.filter(is_superuser=True)
         serializer = AccountSerializer(queryset, many=True)
         return Response(serializer.data)
-
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -106,7 +104,7 @@ class WorkPlaceViewSet(viewsets.ModelViewSet):
     def status_new(self, request):
         queryset = WorkPlace.objects.filter(status='N')
         serializer = WorkPlaceTextSerializer(queryset, many=True)
-        if len(serializer.data)<=0:
+        if queryset.count<=0:
             return Response('No new wokers')
         return Response(serializer.data)
 
