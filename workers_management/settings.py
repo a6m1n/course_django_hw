@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'works.apps.WorksConfig'
+    'works.apps.WorksConfig',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,15 @@ sentry_sdk.init(
     dsn="https://50e7c97f3533495296e6ebd4f8d1a772@sentry.io/1849995",
     integrations=[DjangoIntegration()]
 )
+
+
+# Channels
+ASGI_APPLICATION = 'workers_management.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
