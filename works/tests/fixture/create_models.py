@@ -1,13 +1,13 @@
 from django.utils import timezone
 
-from works.models import Companies, Manager, Work, Worker, WorkTime
+from works.models import Company, Manager, Work, Worker, WorkTime
 
 
 class Create:
     """docstring for Create"""
 
     def create_company(self):
-        return Companies.objects.create(
+        return Company.objects.create(
             company_name="Reebok",
             pub_date=timezone.now()
         )

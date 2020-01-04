@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 # Create your models here.
 
 
-class Companies(models.Model):
+class Company(models.Model):
     company_name = models.CharField(max_length=200)
     pub_date = models.DateTimeField(verbose_name='date published')
 
@@ -14,7 +14,7 @@ class Companies(models.Model):
 
 
 class Manager(models.Model):
-    company = models.ForeignKey(Companies, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
 
     def __str__(self):
@@ -24,7 +24,7 @@ class Manager(models.Model):
 class Work(models.Model):
 
     description = models.CharField(max_length=200)
-    company = models.ForeignKey(Companies, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

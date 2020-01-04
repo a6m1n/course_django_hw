@@ -1,12 +1,11 @@
 from django import forms
 from datetime import datetime
-from .models import Work, Companies, WorkPlace, Worker, WorkTime
+from .models import Work, Company, WorkPlace, Worker, WorkTime
 
 
 class WorkFrorm(forms.Form):
     description = forms.CharField(max_length=200, label='Description work: ')
-    company = forms.ModelChoiceField(
-        queryset=Companies.objects.all(), label='Company: ')
+    company = forms.ModelChoiceField(queryset=Company.objects.all(), label='Company: ')
 
     description.widget.attrs.update({'class': 'form-control'})
     company.widget.attrs.update({'class': 'form-control'})

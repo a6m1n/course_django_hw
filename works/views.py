@@ -4,7 +4,7 @@ from django.views.generic import View
 from sentry_sdk import capture_message
 
 
-from .models import Companies, Worker, WorkPlace, WorkTime, Manager
+from .models import Company, Worker, WorkPlace, WorkTime, Manager
 from .forms import WorkFrorm, SetWorkPlace, WorkTimeForm
 
 
@@ -15,24 +15,24 @@ logger = logging.getLogger(__name__)
 
 
 def index(request):
-    companies = Companies.objects.order_by('id')[:10]
-    return render(request, 'works/works_page.html', {'companies_list': companies})
+    companies = Company.objects.order_by('id')[:10]
+    return render(request, 'works/list_company.html', {'companies_list': companies})
 
 
 def info_work(request, work_id):
     try:
-        company = Companies.objects.get(id=work_id)
-    except Companies.DoesNotExist:
+        company = Company.objects.get(id=work_id)
+    except Company.DoesNotExist:
         logger.error('Company does not exist!')
         return HttpResponseNotFound('Company does not exist')
 
-    return render(request, 'works/info_work.html', {'company': company})
+    return render(request, 'works/detail_company.html', {'company': company})
 
 
 def info_workers(request):
     workers = Worker.objects.order_by('id')[:10]
 
-    return render(request, 'works/workers.html', {'workers': workers})
+    return render(request, 'works/list_workers.html', {'workers': workers})
 
 
 def info_worker(request, worker_id):
@@ -40,15 +40,13 @@ def info_worker(request, worker_id):
         worker = Worker.objects.get(id=worker_id)
     except Worker.DoesNotExist:
         return HttpResponseNotFound('Worker does not exist')
-
     list_work = WorkPlace.objects.filter(worker_id=worker_id, status="F")
 
-    return render(request, 'works/info_worker.html', {'worker': worker, 'list_work': list_work})
+    return render(request, 'works/detali_worker.html', {'worker': worker, 'list_work': list_work})
 
 
 def info_managers(request, work_id):
     managers = Manager.objects.filter(company_id=work_id)[:10]
-
     return render(request, 'works/list_managers.html', {'managers': managers})
 
 
@@ -56,7 +54,7 @@ class WorkCreate(View):
 
     def get(self, request):
         form = WorkFrorm()
-        return render(request, 'works/work_create.html', {'form': form})
+        return render(request, 'works/create_work.html', {'form': form})
 
     def post(self, request):
         forms = WorkFrorm(request.POST)
@@ -79,7 +77,6 @@ class SetWorker(View):
 
 
 class SetWorkTime(View):
-    """docstring for ClassName"""
 
     def get(self, request, worker_id):
         form = WorkTimeForm(worker_id)

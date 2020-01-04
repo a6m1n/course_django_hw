@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 
-from works.models import Companies, Manager, Work, Worker
+from works.models import Company, Manager, Work, Worker
 from works.tests.fixture.create_models import Create 
 
 class CompanieModelsTest(TestCase):
